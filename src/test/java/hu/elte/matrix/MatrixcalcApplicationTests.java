@@ -1,4 +1,4 @@
-package hu.elte.matrixcalc;
+package hu.elte.matrix;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
