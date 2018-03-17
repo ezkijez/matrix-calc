@@ -1,14 +1,18 @@
 package hu.elte.matrix.model;
 
 import hu.elte.matrix.exception.DimensionException;
+import hu.elte.matrix.utils.GaussJordanElimination;
 
 import java.util.Arrays;
 
 public class Matrix {
 
-    private int row;
-    private int col;
-    private double[][] matrix;
+    protected int row;
+    protected int col;
+    protected double[][] matrix;
+
+    public Matrix() {
+    }
 
     public Matrix(int row, int col) {
         this.row = row;
@@ -84,6 +88,10 @@ public class Matrix {
         return result;
     }
 
+    public Matrix getInverse() {
+        return GaussJordanElimination.calculateInverse(this);
+    }
+
     public int getRow() {
         return row;
     }
@@ -139,5 +147,16 @@ public class Matrix {
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    // Formatted table output
+    public void printTable() {
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.col; j++) {
+                System.out.printf("%8.3f ", this.matrix[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 }
