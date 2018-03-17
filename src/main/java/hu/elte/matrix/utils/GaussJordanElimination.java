@@ -1,5 +1,6 @@
 package hu.elte.matrix.utils;
 
+import hu.elte.matrix.exception.DimensionException;
 import hu.elte.matrix.model.IdentityMatrix;
 import hu.elte.matrix.model.Matrix;
 
@@ -13,6 +14,22 @@ public class GaussJordanElimination {
         reduceToDiagonalForm(augmentedMatrix);
 
         return new Matrix(extractInverse(augmentedMatrix));
+    }
+
+    public static double calculateDeterminant(Matrix matrix) {
+        Matrix temp = matrix.copy();
+        int m = temp.getRow();
+
+        int numOfSwaps = calculateRowEchelonForm(temp.getMatrix());
+        double determinant = 1;
+
+        for (int i = 0; i < m; i++) {
+            determinant *= temp.getMatrix()[i][i];
+        }
+
+        double sign = Math.pow(-1, numOfSwaps);
+
+        return sign * determinant;
     }
 
     private static double[][] buildAugmentedMatrix(Matrix A, Matrix B) {
@@ -32,7 +49,10 @@ public class GaussJordanElimination {
         return augmented;
     }
 
-    private static void calculateRowEchelonForm(double[][] a) {
+    // Returns the number of row swaps
+    private static int calculateRowEchelonForm(double[][] a) {
+        int numOfSwaps = 0;
+
         int m = a.length;
         int n = a[0].length;
 
@@ -46,7 +66,7 @@ public class GaussJordanElimination {
             if (a[pivot][k] == 0) {
                 k++;
             } else {
-                swapRows(a, h, pivot);
+                numOfSwaps += swapRows(a, h, pivot);
 
                 for (int i = h + 1; i < m; i++) {
                     double f = a[i][k] / a[h][k];
@@ -56,7 +76,7 @@ public class GaussJordanElimination {
 
                     // Calculate remaining elements in the row
                     for (int j = k + 1; j < n; j++) {
-                        a[i][j] = a[i][j] - f * a[k][j];
+                        a[i][j] -= f * a[k][j];
                     }
                 }
 
@@ -64,6 +84,8 @@ public class GaussJordanElimination {
                 k++;
             }
         }
+
+        return numOfSwaps;
     }
 
     // TODO: combine diagonal division with reduction
@@ -76,7 +98,7 @@ public class GaussJordanElimination {
         for (int i = 0; i < m; i++) {
             double d = a[i][i];
             for (int j = i; j < n; j++) {
-                a[i][j] = a[i][j] / d;
+                a[i][j] /=  d;
             }
         }
 
@@ -87,7 +109,7 @@ public class GaussJordanElimination {
                 a[i][j] = 0;
 
                 for (int k = j + 1; k < n; k++) {
-                    a[i][k] = a[i][k] - f * a[j][k];
+                    a[i][k] -= f * a[j][k];
                 }
             }
         }
@@ -113,12 +135,16 @@ public class GaussJordanElimination {
 
     // Swapping rows doesn't affect inverse calculation,
     // but it changes the sign of determinant
-    private static void swapRows(double[][] a, int row1, int row2) {
+    private static int swapRows(double[][] a, int row1, int row2) {
         if (row1 != row2) {
             double[] temp = a[row1];
             a[row1] = a[row2];
             a[row2] = temp;
+
+            return 1;
         }
+
+        return 0;
     }
 
     // Extracts solution matrix from augmented form

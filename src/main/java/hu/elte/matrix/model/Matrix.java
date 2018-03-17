@@ -88,8 +88,31 @@ public class Matrix {
         return result;
     }
 
-    public Matrix getInverse() {
+    public Matrix getInverse() throws DimensionException {
+        if (this.row != this.col) throw new DimensionException();
+
         return GaussJordanElimination.calculateInverse(this);
+    }
+
+    public double getDeterminant() throws DimensionException {
+        if (this.row != this.col) throw new DimensionException();
+
+        if (this.row == 2) {
+            return this.matrix[0][0] * this.matrix[1][1] - this.matrix[0][1] * this.matrix[1][0];
+        } else {
+            return GaussJordanElimination.calculateDeterminant(this);
+        }
+    }
+
+    // Formatted table output
+    public void printTable() {
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.col; j++) {
+                System.out.printf("%8.3f ", this.matrix[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 
     public int getRow() {
@@ -147,16 +170,5 @@ public class Matrix {
             sb.append("\n");
         }
         return sb.toString();
-    }
-
-    // Formatted table output
-    public void printTable() {
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.col; j++) {
-                System.out.printf("%8.3f ", this.matrix[i][j]);
-            }
-            System.out.println();
-        }
-        System.out.println();
     }
 }
