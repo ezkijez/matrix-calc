@@ -1,6 +1,5 @@
 package hu.elte.matrix.utils;
 
-import hu.elte.matrix.exception.DimensionException;
 import hu.elte.matrix.model.IdentityMatrix;
 import hu.elte.matrix.model.Matrix;
 
@@ -98,7 +97,7 @@ public class GaussJordanElimination {
         for (int i = 0; i < m; i++) {
             double d = a[i][i];
             for (int j = i; j < n; j++) {
-                a[i][j] /=  d;
+                a[i][j] /= d;
             }
         }
 
@@ -122,7 +121,7 @@ public class GaussJordanElimination {
         int pivot = startingFromRow;
 
         double max = Math.abs(a[startingFromRow][inCol]);
-        for (int i = 0; i < a.length; i++) {
+        for (int i = startingFromRow; i < a.length; i++) {
             double absElement = Math.abs(a[i][inCol]);
             if (absElement > max) {
                 max = absElement;
