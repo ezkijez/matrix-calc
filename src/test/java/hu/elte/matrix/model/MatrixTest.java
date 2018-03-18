@@ -88,4 +88,69 @@ public class MatrixTest {
         Assert.assertTrue(original != result);
         Assert.assertTrue(original.equals(result));
     }
+
+    @Test
+    public void subtractTest()throws DimensionException {
+        double[][] values = {{1, 1}};
+        Matrix matrix1 = new Matrix(values);
+        Matrix matrix2 = matrix1.copy();
+
+        double[][] result = {{0, 0}};
+        Matrix expected = new Matrix(result);
+
+        Assert.assertEquals(expected, matrix1.subtract(matrix2));
+    }
+
+    @Test
+    public void subtractDimensionExceptionTest()throws DimensionException {
+        Matrix matrix1 = new Matrix(3, 3);
+        Matrix matrix2 = new Matrix(2, 3);
+
+        try {
+            matrix1.subtract(matrix2);
+            Assert.fail("DimensionException should've been thrown.");
+        } catch (DimensionException e) {}
+    }
+
+    @Test
+    public void multiplyTest() {
+        double[][] values = {{2, 2}};
+        Matrix matrix1 = new Matrix(values);
+
+        double[][] result = {{4, 4}};
+        Matrix expected = new Matrix(result);
+
+        double constant = 2;
+
+        Assert.assertEquals(expected, matrix1.multiply(constant));
+    }
+
+    @Test
+    public void multiplyTestConstantIsNull() {
+        double[][] values = {{2, 2}};
+        Matrix matrix1 = new Matrix(values);
+
+        double constatnt = 0;
+
+        double[][] result = {{0, 0}};
+        Matrix expected = new Matrix(result);
+
+        Assert.assertEquals(expected, matrix1.multiply(constatnt));
+    }
+
+    @Test
+    public void multiplyTestConstantIsMinus() {
+        double[][] values = {{2, 2}};
+        Matrix matrix1 = new Matrix(values);
+
+        double constatnt = -2;
+
+        double[][] result = {{-4, -4}};
+        Matrix expected = new Matrix(result);
+
+        Assert.assertEquals(expected, matrix1.multiply(constatnt));
+    }
+
+
+
 }
