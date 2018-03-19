@@ -1,8 +1,10 @@
 package hu.elte.matrix.model;
 
 import hu.elte.matrix.exception.DimensionException;
+import hu.elte.matrix.exception.InverseException;
 import hu.elte.matrix.utils.GaussJordanElimination;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class Matrix {
@@ -88,7 +90,7 @@ public class Matrix {
         return result;
     }
 
-    public Matrix getInverse() throws DimensionException {
+    public Matrix getInverse() throws DimensionException, InverseException {
         if (this.row != this.col) throw new DimensionException();
 
         return GaussJordanElimination.calculateInverse(this);

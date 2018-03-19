@@ -1,34 +1,34 @@
 package hu.elte.matrix.utils;
 
+import hu.elte.matrix.exception.DimensionException;
+import hu.elte.matrix.exception.InverseException;
 import hu.elte.matrix.model.IdentityMatrix;
 import hu.elte.matrix.model.Matrix;
 
+// Calculations presuppose NxN matrix
 public class GaussJordanElimination {
 
-    public static Matrix calculateInverse(Matrix matrix) {
+    public static void main(String[] args) throws DimensionException, InverseException {
+        double[][] sara = {{2, 2}, {2, 2}};
+
+        new Matrix(sara).printTable();
+        new Matrix(sara).getInverse().printTable();
+    }
+
+    public static Matrix calculateInverse(Matrix matrix) throws InverseException {
         IdentityMatrix identity = new IdentityMatrix(matrix.getRow(), matrix.getCol());
 
         double[][] augmentedMatrix = buildAugmentedMatrix(matrix, identity);
-        calculateRowEchelonForm(augmentedMatrix);
-        reduceToDiagonalForm(augmentedMatrix);
+
+        if (transformToRowEchelonForm(augmentedMatrix) == 0) throw new InverseException();
+
+        transformToDiagonalForm(augmentedMatrix);
 
         return new Matrix(extractInverse(augmentedMatrix));
     }
 
     public static double calculateDeterminant(Matrix matrix) {
-        Matrix temp = matrix.copy();
-        int m = temp.getRow();
-
-        int numOfSwaps = calculateRowEchelonForm(temp.getMatrix());
-        double determinant = 1;
-
-        for (int i = 0; i < m; i++) {
-            determinant *= temp.getMatrix()[i][i];
-        }
-
-        double sign = Math.pow(-1, numOfSwaps);
-
-        return sign * determinant;
+        return transformToRowEchelonForm(matrix.copy().getMatrix());
     }
 
     private static double[][] buildAugmentedMatrix(Matrix A, Matrix B) {
@@ -48,8 +48,8 @@ public class GaussJordanElimination {
         return augmented;
     }
 
-    // Returns the number of row swaps
-    private static int calculateRowEchelonForm(double[][] a) {
+    // Reduces input matrix to row echelon form and returns its determinant
+    private static double transformToRowEchelonForm(double[][] a) {
         int numOfSwaps = 0;
 
         int m = a.length;
@@ -84,12 +84,21 @@ public class GaussJordanElimination {
             }
         }
 
-        return numOfSwaps;
+        // If determinant is zero,
+        // inverse doesn't exist
+        double determinant = 1;
+        for (int i = 0; i < m; i++) {
+            determinant *= a[i][i];
+        }
+
+        double sign = Math.pow(-1, numOfSwaps);
+
+        return sign * determinant;
     }
 
     // TODO: combine diagonal division with reduction
-    // TODO: increase performance
-    private static void reduceToDiagonalForm(double[][] a) {
+    // TODO: improve performance
+    private static void transformToDiagonalForm(double[][] a) {
         int m = a.length;
         int n = a[0].length;
 
@@ -119,8 +128,8 @@ public class GaussJordanElimination {
     // and returns its index number
     private static int findPartialPivot(double[][] a, int startingFromRow, int inCol) {
         int pivot = startingFromRow;
-
         double max = Math.abs(a[startingFromRow][inCol]);
+
         for (int i = startingFromRow; i < a.length; i++) {
             double absElement = Math.abs(a[i][inCol]);
             if (absElement > max) {
