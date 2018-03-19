@@ -1,19 +1,11 @@
 package hu.elte.matrix.utils;
 
-import hu.elte.matrix.exception.DimensionException;
 import hu.elte.matrix.exception.InverseException;
 import hu.elte.matrix.model.IdentityMatrix;
 import hu.elte.matrix.model.Matrix;
 
 // Calculations presuppose NxN matrix
 public class GaussJordanElimination {
-
-    public static void main(String[] args) throws DimensionException, InverseException {
-        double[][] sara = {{2, 2}, {2, 2}};
-
-        new Matrix(sara).printTable();
-        new Matrix(sara).getInverse().printTable();
-    }
 
     public static Matrix calculateInverse(Matrix matrix) throws InverseException {
         IdentityMatrix identity = new IdentityMatrix(matrix.getRow(), matrix.getCol());
