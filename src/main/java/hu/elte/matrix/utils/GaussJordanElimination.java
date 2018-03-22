@@ -4,9 +4,9 @@ import hu.elte.matrix.exception.InverseException;
 import hu.elte.matrix.model.IdentityMatrix;
 import hu.elte.matrix.model.Matrix;
 
-// Calculations presuppose NxN matrix
 public class GaussJordanElimination {
 
+    // Calculations presuppose NxN matrix
     public static Matrix calculateInverse(Matrix matrix) throws InverseException {
         IdentityMatrix identity = new IdentityMatrix(matrix.getRow(), matrix.getCol());
 
@@ -19,8 +19,19 @@ public class GaussJordanElimination {
         return new Matrix(extractInverse(augmentedMatrix));
     }
 
+    // Calculations presuppose NxN matrix
     public static double calculateDeterminant(Matrix matrix) {
         return transformToRowEchelonForm(matrix.copy().getMatrix());
+    }
+
+    // Matrix rank equals the number of linearly independent rows
+    // TODO?: use singular value decomposition instead of Gauss elimination for better reliability
+    public static int calculateRank(Matrix matrix) {
+        double[][] temp = matrix.copy().getMatrix();
+
+        transformToRowEchelonForm(temp);
+
+        return measureDegreeOfLinearIndependence(temp);
     }
 
     private static double[][] buildAugmentedMatrix(Matrix A, Matrix B) {
@@ -113,6 +124,29 @@ public class GaussJordanElimination {
                 }
             }
         }
+    }
+
+    // Calculates the degree of linear independence from a row echelon form matrix
+    // elements are rounded to 2 decimal places to resolve floating point error
+    private static int measureDegreeOfLinearIndependence(double[][] a) {
+        int m = a.length;
+        int n = a[0].length;
+
+        int degree = m;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = i; j < n; j++) {
+                double rounded = Math.round(a[i][j] * 100.0) / 100.0;
+
+                if(rounded != 0) {
+                    break;
+                }
+
+                degree--;
+            }
+        }
+
+        return degree;
     }
 
     // Finds the maximum absolute value in the given column,

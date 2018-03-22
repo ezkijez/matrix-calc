@@ -4,7 +4,6 @@ import hu.elte.matrix.exception.DimensionException;
 import hu.elte.matrix.exception.InverseException;
 import hu.elte.matrix.utils.GaussJordanElimination;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class Matrix {
@@ -104,6 +103,10 @@ public class Matrix {
         } else {
             return GaussJordanElimination.calculateDeterminant(this);
         }
+    }
+
+    public int getRank() {
+        return GaussJordanElimination.calculateRank(this);
     }
 
     // Formatted table output
