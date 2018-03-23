@@ -6,9 +6,25 @@
 
 </head>
 <body>
+    <div>
+        <h3>Adja meg a mátrixot</h3>
+        <h5>Szóközzel elválasztja adja meg a kívánt mátrixot és válasszon a lehetőségek közül egyet!</h5>
 
-    <div th:text="${message}">
+        <select title="options" class="js-matrix-attribution">
+            <option disabled selected>Válasszon az opciók közül</option>
+            <option value="determinant">Determináns</option>
+            <option value="inverse">Inverz</option>
+            <option value="rank">Rang</option>
+        </select>
+        <br/>
+
+        <div class="js-matrix-invalid">Hibás mátrix! Kérem ellenőrizze a megadott adatokat!</div>
+        <textarea rows="30" cols="50" class="js-matrix-input"></textarea>
+        <hr/>
+
+        <button id="send">Küldés</button>
     </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="application/javascript" th:src="@{/js/matrix.js}"></script>
 </body>
 </html>

@@ -9,12 +9,10 @@ import java.util.Map;
 @Controller
 public class IndexController {
 
-    private final String message = "Hello boyzzzzz and girlz!4";
     private final String pageTitle = "Kezdőlap";
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String indexPage(Map<String, Object> model) {
-        model.put("message", message);
         model.put("pageTitle", pageTitle);
         return "index";
     }

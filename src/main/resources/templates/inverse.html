@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title th:text="${pageTitle}"></title>
+
+</head>
+<body>
+<div>
+    <h3>Megadott mátrix</h3>
+    <th:block th:each="row : ${matrix.matrix}">
+        <div>
+            <th:block th:each="col : ${row}">
+                <span style="padding-left: 8px" th:text="${col}"></span>
+            </th:block>
+        </div>
+    </th:block>
+
+    <h3>Mátrix inverze</h3>
+    <th:block th:each="row : ${inverseMatrix.matrix}">
+        <div>
+            <th:block th:each="col : ${row}">
+                <span style="padding-left: 8px" th:text="${col}"></span>
+            </th:block>
+        </div>
+    </th:block>
+</div>
+
+</body>
+</html>

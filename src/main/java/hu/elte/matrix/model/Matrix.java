@@ -142,6 +142,8 @@ public class Matrix {
 
     public void setMatrix(double[][] matrix) {
         this.matrix = matrix;
+        this.row = matrix.length;
+        this.col = matrix[0].length;
     }
 
     @Override
