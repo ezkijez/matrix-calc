@@ -1,10 +1,10 @@
 package hu.elte.matrix.model;
 
 import hu.elte.matrix.exception.DimensionException;
+import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
 
 public class MatrixTest {
 
@@ -67,15 +67,12 @@ public class MatrixTest {
         Assert.assertEquals(expected, matrix1.add(matrix2));
     }
 
-    @Test
-    public void addTestDimensionException() {
+    @Test(expected = DimensionException.class)
+    public void addTestDimensionException() throws DimensionException {
         Matrix matrix1 = new Matrix(2, 2);
         Matrix matrix2 = new Matrix(2, 3);
 
-        try {
-            matrix1.add(matrix2);
-            Assert.fail("DimensionException should've been thrown.");
-        } catch (DimensionException e) {}
+        matrix1.add(matrix2);
     }
 
     @Test
@@ -90,7 +87,7 @@ public class MatrixTest {
     }
 
     @Test
-    public void subtractTest()throws DimensionException {
+    public void subtractTest() throws DimensionException {
         double[][] values = {{1, 1}};
         Matrix matrix1 = new Matrix(values);
         Matrix matrix2 = matrix1.copy();
@@ -101,15 +98,12 @@ public class MatrixTest {
         Assert.assertEquals(expected, matrix1.subtract(matrix2));
     }
 
-    @Test
-    public void subtractDimensionExceptionTest()throws DimensionException {
+    @Test(expected = DimensionException.class)
+    public void subtractDimensionExceptionTest() throws DimensionException {
         Matrix matrix1 = new Matrix(3, 3);
         Matrix matrix2 = new Matrix(2, 3);
 
-        try {
-            matrix1.subtract(matrix2);
-            Assert.fail("DimensionException should've been thrown.");
-        } catch (DimensionException e) {}
+        matrix1.subtract(matrix2);
     }
 
     @Test
