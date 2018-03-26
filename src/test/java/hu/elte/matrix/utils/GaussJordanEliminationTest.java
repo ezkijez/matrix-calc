@@ -9,7 +9,6 @@ import org.junit.Test;
 public class GaussJordanEliminationTest {
 
 
-    @Test
     public void calculateInverseTest1() throws InverseException {
         double[][] values = {{-2, 3}, {-3, 4}};
         Matrix matrix = new Matrix(values);
@@ -21,7 +20,6 @@ public class GaussJordanEliminationTest {
         assertEquals(expected, GaussJordanElimination.calculateInverse(matrix));
     }
 
-    @Test
     public void calculateInverseTest2() throws InverseException {
         double[][] values = {{1, -1, 3}, {-3, 2, -3}, {-2, 1, -1}};
         Matrix matrix = new Matrix(values);
@@ -33,7 +31,6 @@ public class GaussJordanEliminationTest {
         assertEquals(expected, GaussJordanElimination.calculateInverse(matrix));
     }
 
-    @Test
     public void calculateInverseTest3() throws InverseException {
         double[][] values = {{1, 2, 3}, {4, 5, 6}, {7, 2, 9}};
         Matrix matrix = new Matrix(values);
@@ -55,7 +52,6 @@ public class GaussJordanEliminationTest {
         Matrix matrix = new Matrix(values);
 
         System.out.println("Számolt mátrix: " + GaussJordanElimination.calculateInverse(matrix));
-
     }
 
     @Test
@@ -67,7 +63,6 @@ public class GaussJordanEliminationTest {
 
         assertEquals(determinant, GaussJordanElimination.calculateDeterminant(matrix),
             0.0000000001);
-
     }
 
     @Test
@@ -90,7 +85,6 @@ public class GaussJordanEliminationTest {
 
         assertEquals(determinant, GaussJordanElimination.calculateDeterminant(matrix),
             0.0000000001);
-
     }
 
     @Test

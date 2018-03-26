@@ -44,8 +44,10 @@ jacoco {
 
 jacocoTestReport {
 	reports {
-		xml.enabled false
 		csv.enabled false
+		xml.enabled true
         html.enabled true
 	}
 }
+
+check.dependsOn jacocoTestReport
