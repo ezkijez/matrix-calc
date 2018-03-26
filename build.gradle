@@ -16,6 +16,7 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
 
 group = 'hu.elte'
 version = '0.0.1-SNAPSHOT'
@@ -35,4 +36,16 @@ dependencies {
 
 checkstyle {
 	toolVersion '8.8'
+}
+
+jacoco {
+	toolVersion = '0.8.0'
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled false
+		csv.enabled false
+        html.enabled true
+	}
 }
