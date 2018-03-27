@@ -90,12 +90,15 @@ function sendMatrixToServer(attribution, matrix) {
         contentType: 'application/json',
         data: JSON.stringify({
             matrix: matrix
-        })
+        }),
+        success: (response) => {
+            $('html').html(response);
+        }
     });
 }
 
 function isNumeric(num) {
-    return !isNaN(num)
+    return !isNaN(num);
 }
 
 function hideErrorMessage() {

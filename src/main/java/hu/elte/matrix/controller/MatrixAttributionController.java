@@ -28,11 +28,6 @@ public class MatrixAttributionController {
         return "inverse";
     }
 
-    @RequestMapping(value = "/r/matrix/inverse", method = RequestMethod.GET)
-    public String displayMatrixInverse(Map<String, Object> model) {
-        return "inverse";
-    }
-
     @RequestMapping(value = "/api/matrix/determinant", method = RequestMethod.POST, consumes="application/json")
     public String getMatrixDeterminant(Map<String, Object> model, @RequestBody Matrix matrix) {
         double determinant = GaussJordanElimination.calculateDeterminant(matrix);
