@@ -1,28 +1,97 @@
 $(document).ready(() => {
     hideErrorMessage();
     $('#send').on('click', () => {
-        processMatrixInput()
+        processMatrixInput();
+    });
+
+    $('#sendMatrices').on('click', () => {
+        processMatricesInput();
+    });
+
+    $('.js-matrix-operations').on('click', () => {
+        window.location.replace('/r/matrix/operation');
     });
 });
 
 function processMatrixInput() {
     hideErrorMessage();
+    hideSelectAttributionErrorMessage();
     let matrix = [[]];
-    const matrixInputValue = $('.js-matrix-input')[0].value;
-    const attribution = $('.js-matrix-attribution')[0].value;
+    const matrixInputValue = $('.js-matrix-input').val();
+    const attribution = $('.js-matrix-attribution').val();
 
-    const allElementIsNumber = checkIfAllElementIsNumber(matrixInputValue);
+    if (attribution !== null) {
+        const allElementIsNumber = checkIfAllElementIsNumber(matrixInputValue);
 
-    let validMatrix;
-    if (allElementIsNumber) {
-        validMatrix = processLines(matrixInputValue, matrix);
-    }
+        let validMatrix;
+        if (allElementIsNumber) {
+            validMatrix = processLines(matrixInputValue, matrix);
+        }
 
-    if (validMatrix) {
-        sendMatrixToServer(attribution, matrix);
+        if (validMatrix) {
+            sendMatrixToServer(attribution, matrix);
+        } else {
+            showErrorMessage();
+        }
     } else {
         showErrorMessage();
     }
+
+
+}
+
+function processMatricesInput() {
+    hideErrorMessage();
+    hideSelectAttributionErrorMessage();
+
+    let firstMatrix = [[]];
+    let secondMatrix = [[]];
+    const firstMatrixInputValue = $('.js-matrix-input-first').val();
+    const secondMatrixInputValue = $('.js-matrix-input-second').val();
+    const operation = $('.js-matrix-attribution').val();
+
+    if (operation !== undefined) {
+        if (operation === 'multiply') {
+            const allElementIsNumberInFirstMatrix = checkIfAllElementIsNumber(firstMatrixInputValue);
+            const validNumber = isNumeric(secondMatrixInputValue);
+
+            let validMatrix;
+            if (allElementIsNumberInFirstMatrix && validNumber) {
+                validMatrix = processLines(firstMatrixInputValue, firstMatrix);
+            }
+
+            if (validMatrix) {
+                sendMatrixAndConstantToServer(operation, firstMatrix, secondMatrixInputValue);
+            } else {
+                showErrorMessage();
+            }
+        } else {
+            const allElementIsNumberInFirstMatrix = checkIfAllElementIsNumber(firstMatrixInputValue);
+            const allElementIsNumberInSecondtMatrix = checkIfAllElementIsNumber(secondMatrixInputValue);
+
+            let validFirstMatrix;
+            let secondFirstMatrix;
+            if (allElementIsNumberInFirstMatrix && allElementIsNumberInSecondtMatrix) {
+                validFirstMatrix = processLines(firstMatrixInputValue, firstMatrix);
+                secondFirstMatrix = processLines(secondMatrixInputValue, secondMatrix);
+            }
+
+            if (validFirstMatrix && secondFirstMatrix) {
+                if (matricesHaveSameRowAndColNum(firstMatrix, secondMatrix)) {
+                    sendMatricesToServer(operation, firstMatrix, secondMatrix);
+                } else {
+                    showErrorMessage();
+                }
+            } else {
+                showErrorMessage();
+            }
+        }
+
+    } else {
+        showMissingErrorMessage();
+    }
+
+
 }
 
 function processLines(value, matrix) {
@@ -83,6 +152,10 @@ function checkIfAllElementIsNumber(value) {
     return validMatrix;
 }
 
+function matricesHaveSameRowAndColNum(firstMatrix, secondMatrix) {
+    return firstMatrix.length === secondMatrix.length && firstMatrix[0].length === secondMatrix[0].length;
+}
+
 function sendMatrixToServer(attribution, matrix) {
     $.ajax({
         type: 'POST',
@@ -97,14 +170,51 @@ function sendMatrixToServer(attribution, matrix) {
     });
 }
 
+function sendMatrixAndConstantToServer(operation, matrix, constant) {
+    $.ajax({
+        type: 'POST',
+        url: '/api/matrix/' + operation + '/' + constant,
+        contentType: 'application/json',
+        data: JSON.stringify({
+            matrix: matrix
+        }),
+        success: (response) => {
+            $('html').html(response);
+        }
+    });
+}
+
+function sendMatricesToServer(operation, firstMatrix, secondMatrix) {
+    $.ajax({
+        type: 'POST',
+        url: '/api/matrix/' + operation,
+        contentType: 'application/json',
+        data: JSON.stringify({
+            firstMatrix: firstMatrix,
+            secondMatrix: secondMatrix
+        }),
+        success: (response) => {
+            $('html').html(response);
+        }
+    });
+}
+
 function isNumeric(num) {
     return !isNaN(num);
 }
 
-function hideErrorMessage() {
-    $('.js-matrix-invalid')[0].style.display = 'none';
+function showMissingErrorMessage() {
+    $('.js-matrix-missing')[0].style.display = 'none';
+}
+
+function hideSelectAttributionErrorMessage() {
+    $('.js-matrix-missing')[0].style.display = 'block';
 }
 
 function showErrorMessage() {
     $('.js-matrix-invalid')[0].style.display = 'block';
+}
+
+function hideErrorMessage() {
+    $('.js-matrix-invalid')[0].style.display = 'none';
 }
