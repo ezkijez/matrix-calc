@@ -32,11 +32,8 @@ public class MatrixOperationController {
             e.printStackTrace();
         }
 
-        model.put("pageTitle", "Eredmény");
-        model.put("firstMatrix", firstMatrix);
-        model.put("secondMatrix", secondMatrix);
         model.put("resultMatrix", result);
-        return "addsubtract";
+        return "resultMatrix";
     }
 
     @RequestMapping(value = "/api/matrix/subtract", method = RequestMethod.POST, consumes="application/json")
@@ -50,24 +47,16 @@ public class MatrixOperationController {
             e.printStackTrace();
         }
 
-        model.put("pageTitle", "Eredmény");
-        model.put("firstMatrix", firstMatrix);
-        model.put("secondMatrix", secondMatrix);
         model.put("resultMatrix", result);
-        return "addsubtract";
+        return "resultMatrix";
     }
 
     @RequestMapping(value = "/api/matrix/multiply/{constant}", method = RequestMethod.POST, consumes="application/json")
     public String multiplyMatrix(Map<String, Object> model, @RequestBody Matrix matrix, @PathVariable Long constant) {
         Matrix result;
-
         result = matrix.multiply(constant);
 
-        model.put("pageTitle", "Eredmény");
-        model.put("matrix", matrix);
         model.put("resultMatrix", result);
-        model.put("constant", constant);
-
-        return "multiply";
+        return "resultMatrix";
     }
 }

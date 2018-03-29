@@ -1,26 +1,20 @@
+const URL = '/api/matrix/';
+const CONTENT_TYPE = 'application/json';
+
 $(document).ready(() => {
-    hideErrorMessage();
-    $('#send').on('click', () => {
-        processMatrixInput();
-    });
-
-    $('#sendMatrices').on('click', () => {
-        processMatricesInput();
-    });
-
-    $('.js-matrix-operations').on('click', () => {
-        window.location.replace('/r/matrix/operation');
-    });
+    getInitialView();
+    bindEventHandlersForInputs();
 });
 
-function processMatrixInput() {
+function processMatrixInput(firstMatrixInputValue, selectedOptionValue) {
     hideErrorMessage();
-    hideSelectAttributionErrorMessage();
-    let matrix = [[]];
-    const matrixInputValue = $('.js-matrix-input').val();
-    const attribution = $('.js-matrix-attribution').val();
+    hideMissingOptionErrorMessage();
 
-    if (attribution !== null) {
+    let matrix = [[]];
+    const matrixInputValue = firstMatrixInputValue;
+    const option = selectedOptionValue;
+
+    if (option !== null) {
         const allElementIsNumber = checkIfAllElementIsNumber(matrixInputValue);
 
         let validMatrix;
@@ -29,51 +23,49 @@ function processMatrixInput() {
         }
 
         if (validMatrix) {
-            sendMatrixToServer(attribution, matrix);
+            sendMatrixToServer(option, matrix);
         } else {
             showErrorMessage();
         }
     } else {
         showErrorMessage();
     }
-
-
 }
 
-function processMatricesInput() {
+function processMatricesInput(firstMatrixInputValue, secondMatrixInputValue, selectedOptionValue) {
     hideErrorMessage();
-    hideSelectAttributionErrorMessage();
+    hideMissingOptionErrorMessage();
 
     let firstMatrix = [[]];
     let secondMatrix = [[]];
-    const firstMatrixInputValue = $('.js-matrix-input-first').val();
-    const secondMatrixInputValue = $('.js-matrix-input-second').val();
-    const operation = $('.js-matrix-attribution').val();
+    const firstMatrixValue = firstMatrixInputValue;
+    const secondMatrixValue = secondMatrixInputValue;
+    const operation = selectedOptionValue;
 
-    if (operation !== undefined) {
+    if (operation !== null) {
         if (operation === 'multiply') {
-            const allElementIsNumberInFirstMatrix = checkIfAllElementIsNumber(firstMatrixInputValue);
-            const validNumber = isNumeric(secondMatrixInputValue);
+            const allElementIsNumberInFirstMatrix = checkIfAllElementIsNumber(firstMatrixValue);
+            const validNumber = isNumeric(secondMatrixValue);
 
             let validMatrix;
             if (allElementIsNumberInFirstMatrix && validNumber) {
-                validMatrix = processLines(firstMatrixInputValue, firstMatrix);
+                validMatrix = processLines(firstMatrixValue, firstMatrix);
             }
 
             if (validMatrix) {
-                sendMatrixAndConstantToServer(operation, firstMatrix, secondMatrixInputValue);
+                sendMatrixAndConstantToServer(operation, firstMatrix, secondMatrixValue);
             } else {
                 showErrorMessage();
             }
         } else {
-            const allElementIsNumberInFirstMatrix = checkIfAllElementIsNumber(firstMatrixInputValue);
-            const allElementIsNumberInSecondtMatrix = checkIfAllElementIsNumber(secondMatrixInputValue);
+            const allElementIsNumberInFirstMatrix = checkIfAllElementIsNumber(firstMatrixValue);
+            const allElementIsNumberInSecondtMatrix = checkIfAllElementIsNumber(secondMatrixValue);
 
             let validFirstMatrix;
             let secondFirstMatrix;
             if (allElementIsNumberInFirstMatrix && allElementIsNumberInSecondtMatrix) {
-                validFirstMatrix = processLines(firstMatrixInputValue, firstMatrix);
-                secondFirstMatrix = processLines(secondMatrixInputValue, secondMatrix);
+                validFirstMatrix = processLines(firstMatrixValue, firstMatrix);
+                secondFirstMatrix = processLines(secondMatrixValue, secondMatrix);
             }
 
             if (validFirstMatrix && secondFirstMatrix) {
@@ -88,10 +80,8 @@ function processMatricesInput() {
         }
 
     } else {
-        showMissingErrorMessage();
+        showMissingOptionErrorMessage();
     }
-
-
 }
 
 function processLines(value, matrix) {
@@ -133,6 +123,7 @@ function addToMatrix(row, col, elements, matrix) {
     });
     matrix[row] = rowElements;
     row++;
+
     return row;
 }
 
@@ -148,24 +139,27 @@ function checkIfAllElementIsNumber(value) {
         });
     });
 
-
     return validMatrix;
+}
+
+function isSelectedOptionIsOperation(option) {
+    return option === 'multiply' || option === 'add' || option === 'subtract';
 }
 
 function matricesHaveSameRowAndColNum(firstMatrix, secondMatrix) {
     return firstMatrix.length === secondMatrix.length && firstMatrix[0].length === secondMatrix[0].length;
 }
 
-function sendMatrixToServer(attribution, matrix) {
+function sendMatrixToServer(option, matrix) {
     $.ajax({
         type: 'POST',
-        url: '/api/matrix/' + attribution,
-        contentType: 'application/json',
+        url: URL + option,
+        contentType: CONTENT_TYPE,
         data: JSON.stringify({
             matrix: matrix
         }),
         success: (response) => {
-            $('html').html(response);
+            $('.js-matrix-result').html(response);
         }
     });
 }
@@ -173,13 +167,13 @@ function sendMatrixToServer(attribution, matrix) {
 function sendMatrixAndConstantToServer(operation, matrix, constant) {
     $.ajax({
         type: 'POST',
-        url: '/api/matrix/' + operation + '/' + constant,
-        contentType: 'application/json',
+        url: URL + operation + '/' + constant,
+        contentType: CONTENT_TYPE,
         data: JSON.stringify({
             matrix: matrix
         }),
         success: (response) => {
-            $('html').html(response);
+            $('.js-matrix-result').html(response);
         }
     });
 }
@@ -187,14 +181,14 @@ function sendMatrixAndConstantToServer(operation, matrix, constant) {
 function sendMatricesToServer(operation, firstMatrix, secondMatrix) {
     $.ajax({
         type: 'POST',
-        url: '/api/matrix/' + operation,
-        contentType: 'application/json',
+        url: URL + operation,
+        contentType: CONTENT_TYPE,
         data: JSON.stringify({
             firstMatrix: firstMatrix,
             secondMatrix: secondMatrix
         }),
         success: (response) => {
-            $('html').html(response);
+            $('.js-matrix-result').html(response);
         }
     });
 }
@@ -203,18 +197,80 @@ function isNumeric(num) {
     return !isNaN(num);
 }
 
-function showMissingErrorMessage() {
-    $('.js-matrix-missing')[0].style.display = 'none';
+function bindEventHandlerForSendButton() {
+    $('#send').on('click', () => {
+        const firstMatrixInputValue = $('.js-matrix-input-first').val();
+        const secondMatrixInputValue = $('.js-matrix-input-second').val();
+        const selectedValue = $('.js-matrix-options').val();
+
+        if (selectedValue !== null) {
+            if (secondMatrixInputValue !== '' && isSelectedOptionIsOperation(selectedValue)) {
+                processMatricesInput(firstMatrixInputValue, secondMatrixInputValue, selectedValue);
+            } else if (firstMatrixInputValue !== '') {
+                processMatrixInput(firstMatrixInputValue, selectedValue);
+            } else {
+                showErrorMessage();
+            }
+        } else {
+            showMissingOptionErrorMessage();
+        }
+    });
 }
 
-function hideSelectAttributionErrorMessage() {
-    $('.js-matrix-missing')[0].style.display = 'block';
+function bindEventHandlerForSelector() {
+    $('.js-matrix-options').on('change', (event) => {
+        hideMissingOptionErrorMessage();
+        const selectedValue = event.target.value;
+        if (isSelectedOptionIsOperation(selectedValue)) {
+            showSecondMatrixInput();
+        } else {
+            hideSecondMatrixInput();
+        }
+    });
+}
+
+function bindEventHandlerForMatricesInput() {
+    $('.js-matrix-input-first').on('change keyup paste', () => {
+        hideErrorMessage();
+    });
+
+    $('.js-matrix-input-second').on('change keyup paste', () => {
+        hideErrorMessage();
+    });
+}
+
+function bindEventHandlersForInputs() {
+    bindEventHandlerForSendButton();
+    bindEventHandlerForSelector();
+    bindEventHandlerForMatricesInput();
+}
+
+function getInitialView() {
+    hideErrorMessage();
+    hideSecondMatrixInput();
+    hideMissingOptionErrorMessage();
+}
+
+function showMissingOptionErrorMessage() {
+    $('.js-matrix-missing').show();
+}
+
+function hideMissingOptionErrorMessage() {
+    $('.js-matrix-missing').hide();
 }
 
 function showErrorMessage() {
-    $('.js-matrix-invalid')[0].style.display = 'block';
+    $('.js-matrix-invalid').show();
 }
 
 function hideErrorMessage() {
-    $('.js-matrix-invalid')[0].style.display = 'none';
+    $('.js-matrix-invalid').hide();
+}
+
+function showSecondMatrixInput() {
+    $('.js-matrix-input-second').show();
+}
+
+function hideSecondMatrixInput() {
+    $('.js-matrix-input-second').hide();
 }

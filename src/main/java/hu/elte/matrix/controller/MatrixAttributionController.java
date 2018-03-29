@@ -21,34 +21,24 @@ public class MatrixAttributionController {
         } catch (InverseException e) {
             e.printStackTrace();
         }
-        model.put("pageTitle", "Eredmény");
-        model.put("matrix", matrix);
-        model.put("inverseMatrix", inverseMatrix);
+        model.put("resultMatrix", inverseMatrix);
 
-        return "inverse";
+        return "resultMatrix";
     }
 
     @RequestMapping(value = "/api/matrix/determinant", method = RequestMethod.POST, consumes="application/json")
     public String getMatrixDeterminant(Map<String, Object> model, @RequestBody Matrix matrix) {
         double determinant = GaussJordanElimination.calculateDeterminant(matrix);
-
-        model.put("pageTitle", "Eredmény");
-        model.put("matrix", matrix);
-        model.put("matrixOperation", "Mátrix determinánsa");
         model.put("result", determinant);
 
-        return "rankdeterminant";
+        return "resultNumber";
     }
 
     @RequestMapping(value = "/api/matrix/rank", method = RequestMethod.POST, consumes="application/json")
     public String getMatrixRank(Map<String, Object> model, @RequestBody Matrix matrix) {
         double rank = GaussJordanElimination.calculateRank(matrix);
-
-        model.put("pageTitle", "Eredmény");
-        model.put("matrix", matrix);
-        model.put("matrixOperation", "Mátrix rangja");
         model.put("result", rank);
 
-        return "rankdeterminant";
+        return "resultNumber";
     }
 }
