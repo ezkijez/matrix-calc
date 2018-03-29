@@ -55,7 +55,7 @@ public class Matrix {
 
     public Matrix subtract(Matrix other) throws DimensionException {
         if (this.row != other.row || this.col != other.col) {
-            throw new DimensionException("man, u suck");
+            throw new DimensionException();
         }
 
         Matrix result = new Matrix(this.row, this.col);
@@ -89,14 +89,40 @@ public class Matrix {
         return result;
     }
 
+    public Matrix multiply(Matrix other) throws DimensionException {
+        if (this.col != other.row) {
+            throw new DimensionException();
+        }
+        
+        Matrix result = new Matrix(this.row, other.col);
+
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < other.col; j++) {
+
+                double sum = 0;
+                for (int k = 0; k < this.col; k++) {
+                    sum += this.matrix[i][k] * other.matrix[k][j];
+                }
+
+                result.matrix[i][j] = sum;
+            }
+        }
+
+        return result;
+    }
+
     public Matrix getInverse() throws DimensionException, InverseException {
-        if (this.row != this.col) throw new DimensionException();
+        if (this.row != this.col) {
+            throw new DimensionException();
+        }
 
         return GaussJordanElimination.calculateInverse(this);
     }
 
     public double getDeterminant() throws DimensionException {
-        if (this.row != this.col) throw new DimensionException();
+        if (this.row != this.col) {
+            throw new DimensionException();
+        }
 
         if (this.row == 2) {
             return this.matrix[0][0] * this.matrix[1][1] - this.matrix[0][1] * this.matrix[1][0];
@@ -148,13 +174,19 @@ public class Matrix {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Matrix other = (Matrix) o;
 
-        if (row != other.row) return false;
-        if (col != other.col) return false;
+        if (row != other.row || col != other.col) {
+            return false;
+        }
+
         return Arrays.deepEquals(matrix, other.matrix);
     }
 

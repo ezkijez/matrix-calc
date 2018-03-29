@@ -12,7 +12,9 @@ public class GaussJordanElimination {
 
         double[][] augmentedMatrix = buildAugmentedMatrix(matrix, identity);
 
-        if (transformToRowEchelonForm(augmentedMatrix) == 0) throw new InverseException();
+        if (transformToRowEchelonForm(augmentedMatrix) == 0) {
+            throw new InverseException();
+        }
 
         transformToDiagonalForm(augmentedMatrix);
 
@@ -34,16 +36,16 @@ public class GaussJordanElimination {
         return measureDegreeOfLinearIndependence(temp);
     }
 
-    private static double[][] buildAugmentedMatrix(Matrix A, Matrix B) {
-        double[][] augmented = new double[A.getRow()][A.getCol() + B.getCol()];
-        int m = A.getCol();
+    private static double[][] buildAugmentedMatrix(Matrix a, Matrix b) {
+        double[][] augmented = new double[a.getRow()][a.getCol() + b.getCol()];
+        int m = a.getCol();
 
         for (int i = 0; i < augmented.length; i++) {
             for (int j = 0; j < augmented[0].length; j++) {
                 if (j < m) {
-                    augmented[i][j] = A.getMatrix()[i][j];
+                    augmented[i][j] = a.getMatrix()[i][j];
                 } else {
-                    augmented[i][j] = B.getMatrix()[i][j - m];
+                    augmented[i][j] = b.getMatrix()[i][j - m];
                 }
             }
         }
@@ -138,7 +140,7 @@ public class GaussJordanElimination {
             for (int j = i; j < n; j++) {
                 double rounded = Math.round(a[i][j] * 100.0) / 100.0;
 
-                if(rounded != 0) {
+                if (rounded != 0) {
                     break;
                 }
 
