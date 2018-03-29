@@ -146,6 +146,10 @@ function isSelectedOptionIsOperation(option) {
     return option === 'multiply' || option === 'add' || option === 'subtract';
 }
 
+function isSelectedOptionIsAttribution(option) {
+    return option === 'determinant' || option === 'inverse' || option === 'rank';
+}
+
 function matricesHaveSameRowAndColNum(firstMatrix, secondMatrix) {
     return firstMatrix.length === secondMatrix.length && firstMatrix[0].length === secondMatrix[0].length;
 }
@@ -206,7 +210,7 @@ function bindEventHandlerForSendButton() {
         if (selectedValue !== null) {
             if (secondMatrixInputValue !== '' && isSelectedOptionIsOperation(selectedValue)) {
                 processMatricesInput(firstMatrixInputValue, secondMatrixInputValue, selectedValue);
-            } else if (firstMatrixInputValue !== '') {
+            } else if (firstMatrixInputValue !== '' && isSelectedOptionIsAttribution(selectedValue)) {
                 processMatrixInput(firstMatrixInputValue, selectedValue);
             } else {
                 showErrorMessage();
