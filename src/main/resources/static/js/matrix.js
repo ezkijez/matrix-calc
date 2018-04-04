@@ -43,11 +43,11 @@ function processMatricesInput(firstMatrixInputValue, secondMatrixInputValue, sel
     const operation = selectedOptionValue;
 
     if (operation !== null) {
-        if (operation === 'multiply') {
+        if (operation === 'multiply' && !inputIsMatrix(secondMatrixValue)) {
             const allElementIsNumberInFirstMatrix = checkIfAllElementIsNumber(firstMatrixValue);
             const validNumber = isNumeric(secondMatrixValue);
 
-            let validMatrix;
+            let validMatrix = false;
             if (allElementIsNumberInFirstMatrix && validNumber) {
                 validMatrix = processLines(firstMatrixValue, firstMatrix);
             }
@@ -142,6 +142,14 @@ function checkIfAllElementIsNumber(value) {
     return validMatrix;
 }
 
+function inputIsMatrix(value) {
+    let lines = value.split('\n');
+    if (lines.length === 1) {
+        let elements = lines[0].split(' ');
+        return elements.length !== 1;
+    } else return lines.length > 1;
+}
+
 function isSelectedOptionIsOperation(option) {
     return option === 'multiply' || option === 'add' || option === 'subtract';
 }
@@ -203,6 +211,8 @@ function isNumeric(num) {
 
 function bindEventHandlerForSendButton() {
     $('#send').on('click', () => {
+        $('.js-matrix-result').html('');
+
         const firstMatrixInputValue = $('.js-matrix-input-first').val();
         const secondMatrixInputValue = $('.js-matrix-input-second').val();
         const selectedValue = $('.js-matrix-options').val();
