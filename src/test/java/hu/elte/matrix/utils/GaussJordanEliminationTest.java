@@ -32,7 +32,11 @@ public class GaussJordanEliminationTest {
     }
 
     public void calculateInverseTest3() throws InverseException {
-        double[][] values = {{1, 2, 3}, {4, 5, 6}, {7, 2, 9}};
+        double[][] values = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 2, 9}
+        };
         Matrix matrix = new Matrix(values);
 
         double[][] result = {
@@ -109,6 +113,20 @@ public class GaussJordanEliminationTest {
             0.0000000001);
     }
 
+    @Test
+    public void calculateRankTest() {
+        double[][] values = {
+                {1, 2, 3},
+                {0, 5, 4},
+                {0, 10, 2}
+        };
+        Matrix matrix = new Matrix(values);
+
+        double rank = 3;
+
+        assertEquals(rank, GaussJordanElimination.calculateRank(matrix),
+                0.0000000001);
+    }
 
 
 
