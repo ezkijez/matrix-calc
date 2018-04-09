@@ -69,10 +69,14 @@ function processMatricesInput(firstMatrixInputValue, secondMatrixInputValue, sel
             }
 
             if (validFirstMatrix && secondFirstMatrix) {
-                if (matricesHaveSameRowAndColNum(firstMatrix, secondMatrix)) {
-                    sendMatricesToServer(operation, firstMatrix, secondMatrix);
+                if (operation !== 'multiply') {
+                    if (matricesHaveSameRowAndColNum(firstMatrix, secondMatrix)) {
+                        sendMatricesToServer(operation, firstMatrix, secondMatrix);
+                    } else {
+                        showErrorMessage();
+                    }
                 } else {
-                    showErrorMessage();
+                    sendMatricesToServer(operation, firstMatrix, secondMatrix);
                 }
             } else {
                 showErrorMessage();
@@ -93,6 +97,7 @@ function processLines(value, matrix) {
     let i = 0;
     let j = 0;
     lines.map(line => {
+        line = line.trim();
         let rowElements = line.split(' ');
         if (firstLine) {
             numberOfElements = rowElements.length;
@@ -145,7 +150,7 @@ function checkIfAllElementIsNumber(value) {
 function inputIsMatrix(value) {
     let lines = value.split('\n');
     if (lines.length === 1) {
-        let elements = lines[0].split(' ');
+        let elements = lines[0].trim().split(' ');
         return elements.length !== 1;
     } else return lines.length > 1;
 }
