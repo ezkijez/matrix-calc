@@ -171,7 +171,7 @@ public class Matrix {
      *
      * @return the inverse of the matrix
      * @throws DimensionException if the matrix is not square
-     * @throws InverseException if TODO
+     * @throws InverseException if the matrix inverse doesn't exist
      */
     public Matrix getInverse() throws DimensionException, InverseException {
         if (this.row != this.col) {
