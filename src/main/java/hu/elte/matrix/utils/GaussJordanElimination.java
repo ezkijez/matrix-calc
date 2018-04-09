@@ -179,7 +179,7 @@ public class GaussJordanElimination {
 
         for (int i = 0; i < m; i++) {
             for (int j = i; j < n; j++) {
-                double rounded = Math.round(a[i][j] * 100.0) / 100.0;
+                double rounded = Precision.round(a[i][j], 2);
 
                 if (rounded != 0) {
                     break;

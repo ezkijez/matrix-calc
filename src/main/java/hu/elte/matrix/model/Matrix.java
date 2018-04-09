@@ -3,6 +3,7 @@ package hu.elte.matrix.model;
 import hu.elte.matrix.exception.DimensionException;
 import hu.elte.matrix.exception.InverseException;
 import hu.elte.matrix.utils.GaussJordanElimination;
+import hu.elte.matrix.utils.Precision;
 
 import java.util.Arrays;
 
@@ -40,6 +41,25 @@ public class Matrix {
         this.row = matrix.length;
         this.col = matrix[0].length;
         this.matrix = matrix;
+    }
+
+    /**
+     * Rounds every element of this matrix to the given decimal places and
+     * returns a new matrix with the rounded values.
+     *
+     * @param places required precision
+     * @return new matrix with the rounded values
+     */
+    public Matrix setPrecision(int places) {
+        double[][] roundedMatrix = new double[this.row][this.col];
+
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.col; j++) {
+                roundedMatrix[i][j] = Precision.round(this.matrix[i][j], places);
+            }
+        }
+
+        return new Matrix(roundedMatrix);
     }
 
     /**
