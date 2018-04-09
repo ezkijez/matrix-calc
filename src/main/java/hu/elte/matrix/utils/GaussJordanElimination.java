@@ -8,7 +8,7 @@ public class GaussJordanElimination {
 
     // Calculations presuppose NxN matrix
     public static Matrix calculateInverse(Matrix matrix) throws InverseException {
-        IdentityMatrix identity = new IdentityMatrix(matrix.getRow(), matrix.getCol());
+        IdentityMatrix identity = new IdentityMatrix(matrix.getRow());
 
         double[][] augmentedMatrix = buildAugmentedMatrix(matrix, identity);
 
