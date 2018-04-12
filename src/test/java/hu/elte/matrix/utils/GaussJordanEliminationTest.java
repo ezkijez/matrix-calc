@@ -8,29 +8,27 @@ import org.junit.Test;
 
 public class GaussJordanEliminationTest {
 
-
+    @Test
     public void calculateInverseTest1() throws InverseException {
         double[][] values = {{-2, 3}, {-3, 4}};
         Matrix matrix = new Matrix(values);
 
         double[][] result = {{4, -3}, {3, -2}};
         Matrix expected = new Matrix(result);
-        System.out.println("Helyes eredmény: " + expected);
-        System.out.println("Számolt mátrix: " + GaussJordanElimination.calculateInverse(matrix));
-        assertEquals(expected, GaussJordanElimination.calculateInverse(matrix));
+        assertEquals(expected, GaussJordanElimination.calculateInverse(matrix).setPrecision(3));
     }
 
+    @Test
     public void calculateInverseTest2() throws InverseException {
         double[][] values = {{1, -1, 3}, {-3, 2, -3}, {-2, 1, -1}};
         Matrix matrix = new Matrix(values);
 
         double[][] result = {{1, 2, -3}, {3, 5, -6}, {1, 1, -1}};
         Matrix expected = new Matrix(result);
-        System.out.println("Helyes eredmény: " + expected);
-        System.out.println("Számolt mátrix: " + GaussJordanElimination.calculateInverse(matrix));
-        assertEquals(expected, GaussJordanElimination.calculateInverse(matrix));
+        assertEquals(expected, GaussJordanElimination.calculateInverse(matrix).setPrecision(3));
     }
 
+    @Test
     public void calculateInverseTest3() throws InverseException {
         double[][] values = {
                 {1, 2, 3},
@@ -40,14 +38,12 @@ public class GaussJordanEliminationTest {
         Matrix matrix = new Matrix(values);
 
         double[][] result = {
-            {-0.916666666667,0.3333333333, 0.0833333},
-            {-0.1666666666666, 0.333333333333, -0.16666666666},
-            {0.75, -0.333333333, 0.0833333333333}
+            {-0.92, 0.33, 0.08},
+            {-0.17, 0.33, -0.17},
+            {0.75, -0.33, 0.08}
         };
         Matrix expected = new Matrix(result);
-        System.out.println("Helyes eredmény: " + expected);
-        System.out.println("Számolt mátrix: " + GaussJordanElimination.calculateInverse(matrix));
-        assertEquals(expected, GaussJordanElimination.calculateInverse(matrix));
+        assertEquals(expected, GaussJordanElimination.calculateInverse(matrix).setPrecision(2));
     }
 
     @Test(expected = InverseException.class)
