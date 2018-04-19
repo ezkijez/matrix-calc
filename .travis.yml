@@ -7,7 +7,12 @@ branches:
 
 cache:
   directories:
-    - $HOME/.gradle
-
+    - "$HOME/.gradle"
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: sBAjCr5Uk67aywLz314OjkLcJUWyuTOGQ6yBYLvD8PyFeLBrYVOD0exdItShcG4oLzRhT8vGMSh+F8dJEVdd21Su1FGZG3WSm5fG6ivsgI8a7FSyq5N2r8lF/B4bq8HfKei85++hOxvY9IRoVSXLutoZPlvsBAnVXe3+BBGgVIv5lyK2Fxc213ZcKin+DXKeuVRoO42ZnEZb+9DpBC6RLLHG7zlH5wzlewu4hnAD7rGlqVWTpglu18XfdWpAby0vUZ/xNigPBlJPaPlPMdmEc50HTWrAdTNfHKpSQ1YELK2r6+OuOsW1ZZkFtiY/2S2PcWgDT9Z8H36eZ341tH+OZ6eQd7zqaKQ/FXpC6UxYgvk8Xw03C9v7lcKn6C5A3hEAxKyiFLZOaskl9bsfG4j6Z0I/CJk9sN2lC+FU48I81VUgBR2DKitIpScuOiEa3hZ86WAtUwM+CQgQBgQIy4Dkz3Si5YGPsXn4rJb3E4KBJOW74YOJlrXFwnKEN2Z0pQ3YkpbZzVgxa3WijJOevAaDpeHqC4AlOko84uTufd5AXBAIKEbP2Yn17TCLJS1bnQ7oI31wjck7CePMMNzm7x2TQlb8AA6cfBuV3ZnulEpwrjqkQRlFToX9xkWXjdF7kQPnoTrZ/SbiXNnMaZDA2kNull1ns5QMNnUoJmyxK3nM5IQ=
+  app: matrix-calculator

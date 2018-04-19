@@ -19,7 +19,7 @@ public class GaussJordanElimination {
         double[][] augmentedMatrix = buildAugmentedMatrix(matrix, identity);
 
         if (transformToRowEchelonForm(augmentedMatrix) == 0) {
-            throw new InverseException();
+            throw new InverseException("Not invertible matrix");
         }
 
         transformToDiagonalForm(augmentedMatrix);

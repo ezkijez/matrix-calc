@@ -88,7 +88,7 @@ public class Matrix {
      */
     public Matrix add(Matrix other) throws DimensionException {
         if (this.row != other.row || this.col != other.col) {
-            throw new DimensionException();
+            throw new DimensionException("Dimension of the matrices do not match");
         }
 
         Matrix result = new Matrix(this.row, this.col);
@@ -227,20 +227,6 @@ public class Matrix {
      */
     public int getRank() {
         return GaussJordanElimination.calculateRank(this);
-    }
-
-    /**
-     * Prints the matrix in a formatted table format.
-     * Uses {@code System.out}, serves debugging and development purposes.
-     */
-    public void printTable() {
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.col; j++) {
-                System.out.printf("%8.3f ", this.matrix[i][j]);
-            }
-            System.out.println();
-        }
-        System.out.println();
     }
 
     public int getRow() {

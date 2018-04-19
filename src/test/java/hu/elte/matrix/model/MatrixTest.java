@@ -31,6 +31,55 @@ public class MatrixTest {
     }
 
     @Test
+    public void equalsSameTest() {
+        double[][] values = {{1, 2, 3}};
+
+        Matrix matrix = new Matrix(values);
+
+        Assert.assertTrue(matrix.equals(matrix));
+    }
+
+    @Test
+    public void equalsOtherNullTest() {
+        double[][] values = {{1, 2, 3}};
+
+        Matrix matrix = new Matrix(values);
+
+        Assert.assertFalse(matrix.equals(null));
+    }
+
+    @Test
+    public void equalsOtherNotMatrixTest() {
+        double[][] values = {{1, 2, 3}};
+
+        Matrix matrix = new Matrix(values);
+
+        Assert.assertFalse(matrix.equals(new Double(33)));
+    }
+
+    @Test
+    public void equalsDifferentDimensionTest() {
+        double[][] values1 = {{1, 2, 3}};
+        double[][] values2 = {{1, 2}, {3, 4}};
+
+        Matrix matrix1 = new Matrix(values1);
+        Matrix matrix2 = new Matrix(values2);
+
+        Assert.assertFalse(matrix1.equals(matrix2));
+    }
+
+    @Test
+    public void equalsDifferentDimensionTest2() {
+        double[][] mxValues1 = {{1, 2, 3}};
+        double[][] mxValues2 = {{1, 2, 3, 4}};
+
+        Matrix matrix1 = new Matrix(mxValues1);
+        Matrix matrix2 = new Matrix(mxValues2);
+
+        Assert.assertFalse(matrix1.equals(matrix2));
+    }
+
+    @Test
     public void copyTestByChanging() {
         double[][] values = {{1, 1, 1}, {1, 1, 1}};
 
@@ -75,6 +124,28 @@ public class MatrixTest {
         matrix1.add(matrix2);
     }
 
+    @Test(expected = DimensionException.class)
+    public void addTestDimensionException2() throws DimensionException {
+        Matrix matrix1 = new Matrix(1, 2);
+        Matrix matrix2 = new Matrix(2, 2);
+
+        matrix1.add(matrix2);
+    }
+
+    @Test
+    public void addTestDimensionExceptionMessage() {
+        Matrix matrix1 = new Matrix(2, 2);
+        Matrix matrix2 = new Matrix(2, 3);
+
+        try {
+            matrix1.add(matrix2);
+            Assert.fail("DimensionException should have been thrown!");
+        } catch (DimensionException e) {
+            String expected = "Dimension of the matrices do not match";
+            Assert.assertEquals(expected, e.getMessage());
+        }
+    }
+
     @Test
     public void multiplyByOne() {
         double[][] values = {{1, 1, 1}, {1, 1, 1}};
@@ -102,6 +173,14 @@ public class MatrixTest {
     public void subtractDimensionExceptionTest() throws DimensionException {
         Matrix matrix1 = new Matrix(3, 3);
         Matrix matrix2 = new Matrix(2, 3);
+
+        matrix1.subtract(matrix2);
+    }
+
+    @Test(expected = DimensionException.class)
+    public void subtractDimensionExceptionTest2() throws DimensionException {
+        Matrix matrix1 = new Matrix(3, 3);
+        Matrix matrix2 = new Matrix(3, 2);
 
         matrix1.subtract(matrix2);
     }
@@ -157,7 +236,7 @@ public class MatrixTest {
                 {2, 2},
                 {2, 2}
         };
-        Matrix matrix2 = new Matrix(values);
+        Matrix matrix2 = new Matrix(values2);
 
         double[][] result = {
                 {8, 8},
@@ -311,12 +390,38 @@ public class MatrixTest {
     }
 
     @Test
-    public void constructorTest() {
+    public void constructorParamTest() {
         Matrix matrix = new Matrix(2, 3);
-        Matrix matrix1 = new Matrix();
+
+        Assert.assertEquals(2, matrix.getRow());
+        Assert.assertEquals(3, matrix.getCol());
     }
 
+    @Test
+    public void emptyConstructorTest() {
+        Matrix matrix = new Matrix();
 
+        Assert.assertEquals(0, matrix.getRow());
+        Assert.assertEquals(0, matrix.getCol());
+    }
 
+    @Test
+    public void setMatrixTest() {
+        Matrix matrix = new Matrix();
+
+        double[][] newValues = {{1, 2}, {3, 4}};
+        matrix.setMatrix(newValues);
+
+        Matrix expected = new Matrix(newValues);
+        Assert.assertEquals(expected, matrix);
+    }
+
+    @Test
+    public void toStringTest() {
+        Matrix matrix = new Matrix(2, 2);
+
+        String expected = "0.0 0.0 \n0.0 0.0 \n";
+        Assert.assertEquals(expected, matrix.toString());
+    }
 
 }

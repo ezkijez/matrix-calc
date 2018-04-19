@@ -1,6 +1,7 @@
 package hu.elte.matrix.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import hu.elte.matrix.exception.InverseException;
 import hu.elte.matrix.model.Matrix;
@@ -51,7 +52,21 @@ public class GaussJordanEliminationTest {
         double[][] values = {{2, 2}, {2, 2}};
         Matrix matrix = new Matrix(values);
 
-        System.out.println("Számolt mátrix: " + GaussJordanElimination.calculateInverse(matrix));
+        GaussJordanElimination.calculateInverse(matrix);
+    }
+
+    @Test
+    public void calculateInverseExceptionMessageTest() {
+        double[][] values = {{2, 2}, {2, 2}};
+        Matrix matrix = new Matrix(values);
+
+        try {
+            GaussJordanElimination.calculateInverse(matrix);
+            fail("InverseException should have been thrown");
+        } catch (InverseException e) {
+            String expected = "Not invertible matrix";
+            assertEquals(expected, e.getMessage());
+        }
     }
 
     @Test
@@ -123,9 +138,5 @@ public class GaussJordanEliminationTest {
         assertEquals(rank, GaussJordanElimination.calculateRank(matrix),
                 0.0000000001);
     }
-
-
-
-
 
 }
