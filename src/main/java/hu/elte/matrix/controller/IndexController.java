@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class IndexController {
 
-    private final String pageTitle = "Kezdőlap";
+    private final String pageTitle = "Mátrix kalkulátor";
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String indexPage(Map<String, Object> model) {

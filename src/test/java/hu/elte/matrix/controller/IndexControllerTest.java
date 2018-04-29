@@ -29,6 +29,6 @@ public class IndexControllerTest {
             .accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(view().name("index"))
-            .andExpect(model().attribute("pageTitle", equalTo("Kezdőlap")));
+            .andExpect(model().attribute("pageTitle", equalTo("Mátrix kalkulátor")));
     }
 }
